@@ -1,0 +1,16 @@
+# .NET
+bin/
+obj/
+*.user
+*.suo
+.vs/
+
+# Arquivos temporários
+*.zip
+
+# Node / Angular
+node_modules/
+dist/
+
+# Ambiente
+.env
