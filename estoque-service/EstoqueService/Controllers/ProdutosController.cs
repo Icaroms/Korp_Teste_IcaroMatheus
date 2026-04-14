@@ -3,10 +3,12 @@ using EstoqueService.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-// Corpo da requisição para o endpoint de desconto de saldo
-public record DescontarRequest(int Quantidade);
+
 
 namespace EstoqueService.Controllers;
+
+// Corpo da requisição para o endpoint de desconto de saldo
+public record DescontarRequest(int Quantidade);
 
 [ApiController]
 [Route("produtos")]

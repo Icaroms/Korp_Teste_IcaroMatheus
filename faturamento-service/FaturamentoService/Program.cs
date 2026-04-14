@@ -33,4 +33,11 @@ app.UseHttpsRedirection();
 // Mapeia as rotas dos controllers
 app.MapControllers();
 
+// Aplica as migrations automaticamente ao iniciar a aplicação
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    db.Database.Migrate();
+}
+
 app.Run();
