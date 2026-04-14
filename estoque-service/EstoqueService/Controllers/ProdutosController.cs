@@ -3,6 +3,9 @@ using EstoqueService.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
+// Corpo da requisição para o endpoint de desconto de saldo
+public record DescontarRequest(int Quantidade);
+
 namespace EstoqueService.Controllers;
 
 [ApiController]
@@ -47,6 +50,28 @@ public class ProdutosController : ControllerBase
         await _context.SaveChangesAsync();
 
         return CreatedAtAction(nameof(GetById), new { id = produto.Id }, produto);
+    }
+
+    // POST /produtos/{id}/descontar
+    // Subtrai uma quantidade do saldo do produto informado
+    // Retorna 404 se o produto não for encontrado
+    // Retorna 400 se o saldo atual for insuficiente para a quantidade solicitada
+    [HttpPost("{id}/descontar")]
+    public async Task<IActionResult> Descontar(int id, [FromBody] DescontarRequest request)
+    {
+        var produto = await _context.Produtos.FindAsync(id);
+
+        if (produto is null)
+            return NotFound();
+
+        // Verifica se o saldo disponível é suficiente para realizar o desconto
+        if (produto.Saldo < request.Quantidade)
+            return BadRequest($"Saldo insuficiente. Saldo atual: {produto.Saldo}, quantidade solicitada: {request.Quantidade}.");
+
+        produto.Saldo -= request.Quantidade;
+        await _context.SaveChangesAsync();
+
+        return Ok(produto);
     }
 
     // DELETE /produtos/{id}

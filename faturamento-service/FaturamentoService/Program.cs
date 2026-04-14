@@ -9,6 +9,12 @@ builder.Services.AddControllers();
 // Configura o OpenAPI (Swagger) para documentação dos endpoints
 builder.Services.AddOpenApi();
 
+// Registra o HttpClient nomeado para comunicação com o EstoqueService
+builder.Services.AddHttpClient("EstoqueService", client =>
+{
+    client.BaseAddress = new Uri("http://localhost:5000/");
+});
+
 // Registra o AppDbContext usando a connection string "DefaultConnection" do appsettings.json
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
